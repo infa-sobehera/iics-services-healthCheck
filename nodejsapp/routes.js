@@ -1,9 +1,26 @@
 var express = require("express");
+var Router = express.Router();
+var conn = require('./connection')
 
-var router = express.Router();
+var https = require('https');
+const { type } = require("os");
+const { resolveAny } = require("dns");
+const { verify } = require("crypto");
+let data = '';
 
-router.get("/", function(req, res) {
-res.render("index");
+Router.get("/", (req, res) => {
+    conn.query("SELECT * FROM rel_global;SELECT * from rel_pod",[1,2], (err, rows, fields) => {
+        if (!err) {
+            res.render('rel', { page_title: "Rel Services ", data: rows });
+        }
+        else {
+            console.log(error);
+            res.render('rel', { page_title: "Rel Services ", data: '' });
+
+        }
+    })
+
+   
 });
 
-module.exports = router;
+module.exports = Router;
