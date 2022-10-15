@@ -10,6 +10,7 @@ var app = express();
 
 app.set("port", process.env.PORT || 3000);
 app.set("views", path.join(__dirname, "views"));
+app.use(express.static(__dirname + '/static'));
 app.set("view engine", "ejs");
 
 app.get("/", function (req, res) {
@@ -22,12 +23,11 @@ app.get("/mrel", function (req, res) {
 })
 
 const global_service_list = ['package-manager','authz-service', 'orgexpiry','branding-service','content-repo','ma', 'scim-service', 'orgexpiry'];
-const pod_service_list = ['admin-service','auditlog-service','autoscaler-service','bundle-service','callback-service','frs','jls-di','kms-service','license-service','ldm','migration','notification-service','p2pms','preference-service','scheduler-service','session-service','vcs']
+const pod_service_list = ['admin-service','auditlog-service','autoscaler-service','bundle-service','callback-service','frs','jls-di','kms-service','license-service','ldm','migration','notification-service','p2pms','preference-service','scheduler-service','session-service','vcs','ac','runtime']
 var base_url = "https://qa-$$$.rel.infaqa.com/.../mgmtapi/version/";
 
 
 function fetchData(url, name) {
-  // console.log(url);
   https.get(url, (resp) => {
     let data = '';
     // console.log(url,name);
@@ -99,8 +99,13 @@ function fetchDataPod(url, name) {
 
     // The whole response has been received. Print out the result.
     resp.on('end', () => {
-
-      let attributes = data.split("\n");
+      let attributes = '';
+      if(name == 'ac' || name == 'runtime'){
+        attributes = data.split("\\n");
+      }
+      else{
+        attributes = data.split("\n");
+      }
       let ver = attributes[3].split("=")[1];
       var id = attributes[4].split("=")[1];
       id = parseInt(id);

@@ -6,6 +6,8 @@
     <title> Service Status </title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+
 </head>
 
 <body>
@@ -43,72 +45,79 @@
             </form> -->
         </div>
     </nav>
-    <h1>Global Services</h1>
-    <br>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Image Version</th>
-                <th scope="col">Refreshed At</th>
+    <div class=" container data-table">
+        <div class="row">
+            <div class="col">
+                <h5>Global Services</h5>
+                <table class="table table-hover table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Image Version</th>
+                            <th scope="col">Refreshed At</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            <% if(data[0].length){ for(var i=0; i< data[0].length; i++) {%>
-                <tr>
-                    <td>
-                       <a href = <%= data[0][i].service_url%>><%= data[0][i].service_name%> </a> 
-                    </td>
-                    <td>
-                        <%= data[0][i].version%>
-                    </td>
-                    <td>
-                        <%= data[0][i].lastUpdated%>
-                    </td>
-                </tr>
-                <% } }else{ %>
-                    <tr>
-                        <td colspan="3">No user</td>
-                    </tr>
-                    <% } %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(data[0].length){ for(var i=0; i< data[0].length; i++) {%>
+                            <tr>
+                                <td>
+                                    <a href=<%=data[0][i].service_url%>><%= data[0][i].service_name%> </a>
+                                </td>
+                                <td>
+                                    <%= data[0][i].version%>
+                                </td>
+                                <td>
+                                    <%= data[0][i].lastUpdated%>
+                                </td>
+                            </tr>
+                            <% } }else{ %>
+                                <tr>
+                                    <td colspan="3">No user</td>
+                                </tr>
+                                <% } %>
 
-        </tbody>
-    </table>
+                    </tbody>
+                </table>
+            </div>
 
-    <br>
-    <h1>Pod Services</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Version</th>
-                <th scope="col">Last Updated</th>
+            <div class="col">
 
-            </tr>
-        </thead>
-        <tbody>
-            <% if(data[1].length){ for(var i=0; i< data[1].length; i++) {%>
-                <tr>
-                    <td>
-                       <a href = <%= data[1][i].service_url%>><%= data[1][i].service_name%> </a> 
-                    </td>
-                    <td>
-                        <%= data[1][i].version%>
-                    </td>
-                    <td>
-                        <%= data[1][i].lastUpdated%>
-                    </td>
-                </tr>
-                <% } }else{ %>
-                    <tr>
-                        <td colspan="3">No user</td>
-                    </tr>
-                    <% } %>
+                <h5>Pod Services</h5>
+                <table class="table table-hover table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Image Version</th>
+                            <th scope="col">Refreshed At</th>
 
-        </tbody>
-    </table> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(data[1].length){ for(var i=0; i< data[1].length; i++) {%>
+                            <tr>
+                                <td>
+                                    <a href=<%=data[1][i].service_url%>><%= data[1][i].service_name%> </a>
+                                </td>
+                                <td>
+                                    <%= data[1][i].version%>
+                                </td>
+                                <td>
+                                    <%= data[1][i].lastUpdated%>
+                                </td>
+                            </tr>
+                            <% } }else{ %>
+                                <tr>
+                                    <td colspan="3">No user</td>
+                                </tr>
+                                <% } %>
 
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

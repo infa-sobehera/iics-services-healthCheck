@@ -1,0 +1,15 @@
+.data-table{
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 1%;     
+}
+body{
+    /* background-color: aqua; */
+}
+thead{
+    font-size: 11pt;
+}
+tbody{
+    font-size: 11pt;
+}
+
