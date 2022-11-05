@@ -3,6 +3,19 @@
     padding-right: 1%;
     padding-top: 1%;     
 }
+.boxes{
+    background-color:#0DD4B3;
+    margin: 1%;
+    border-radius: 4%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+.boxes[color-status = R]{
+    background-color:#E75858;
+}
+.boxes[color-status = G]{
+    background-color: #0DD4B3;
+}
 body{
     /* background-color: aqua; */
 }
@@ -11,5 +24,13 @@ thead{
 }
 tbody{
     font-size: 11pt;
+}
+p{
+    font-size: 8pt;
+}
+
+.horizontal{     
+    margin-top: 5pt;
+    margin-bottom: 5pt;
 }
 

@@ -1,0 +1,102 @@
+<%- include('partials/header.ejs') %>
+
+    <link rel="stylesheet" href="styles.css">
+
+   
+    <div class=" container data-table">
+        <h4>Environment : <%= data[0].env_name%></h4>
+
+        <h5>Global Services</h5>
+
+        <div class="row">
+            <% if(data.length){ for(var i=0; i< data.length; i++) {%>
+                <% if (data[i].global_or_pod=='GLOBAL' || data[i].global_or_pod=='COMMON') { %>
+                    <div class="col-2 boxes">
+                        <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
+                        <hr class="horizontal">
+                        
+                        <p class="text"><b>Build Date </b>
+                            <%= data[i].build_date%>
+                        </p>
+                        <p class="text"><b>Version </b>
+                            <%= data[i].image_version%>
+                        </p>
+                        <p class="text"><b>Refreshed At: </b>
+                            <%= data[i].refreshed_at%>
+                        </p>
+
+                    </div>
+                    <% } %>
+
+                        <% } }else{ %>
+                            <div class="col">
+                                <p>No user</p>
+                            </div>
+                            <% } %>
+
+
+        </div>
+    </div>
+    <div class=" container data-table">
+        <h5>POD1 Services</h5>
+
+        <div class="row">
+            <% if(data.length){ for(var i=0; i< data.length; i++) {%>
+                <% if (data[i].global_or_pod=='POD1' ) { %>
+                    <div class="col-2 boxes">
+                        <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
+                        <hr class="horizontal">
+                        <p class="text"><b>Build Date </b>
+                            <%= data[i].build_date%>
+                        </p>
+                        <p class="text"><b>Version </b>
+                            <%= data[i].image_version%>
+                        </p>
+                        <p class="text"><b>Refreshed At: </b>
+                            <%= data[i].refreshed_at%>
+                        </p>
+
+                    </div>
+                    <% } %>
+
+                        <% } }else{ %>
+                            <div class="col">
+                                <p>No user</p>
+                            </div>
+                            <% } %>
+
+
+        </div>
+    </div>
+    <div class=" container data-table">
+
+        <div class="row">
+            <% if(data.length){ for(var i=0; i< data.length; i++) {%>
+                <% if (data[i].global_or_pod=='POD2' ) { %>
+                    <div class="col-2 boxes">
+                        <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
+                        <hr class="horizontal">
+                        <p class="text"><b>Build Date </b>
+                            <%= data[i].build_date%>
+                        </p>
+                        <p class="text"><b>Version </b>
+                            <%= data[i].image_version%>
+                        </p>
+                        <p class="text"><b>Refreshed At: </b>
+                            <%= data[i].refreshed_at%>
+                        </p>
+
+                    </div>
+                    <% } %>
+
+                        <% } }else{ %>
+                            <div class="col">
+                                <p>No user</p>
+                            </div>
+                            <% } %>
+
+
+        </div>
+    </div>
+
+    <%- include('partials/footer.ejs') %>
