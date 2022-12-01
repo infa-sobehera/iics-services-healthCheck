@@ -2,19 +2,20 @@
 
     <link rel="stylesheet" href="styles.css">
 
-   
+
     <div class=" container data-table">
-        <h4>Environment : <%= data[0].env_name%></h4>
+        <h4>Environment : <%= data[0].env_name%>
+        </h4>
 
         <h5>Global Services</h5>
 
         <div class="row">
             <% if(data.length){ for(var i=0; i< data.length; i++) {%>
-                <% if (data[i].global_or_pod=='GLOBAL' || data[i].global_or_pod=='COMMON') { %>
-                    <div class="col-2 boxes">
-                        <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
+                <% if (data[i].global_or_pod=='GLOBAL' || data[i].global_or_pod=='COMMON' ) { %>
+                    <div color-status=<%=data[i].pod_status%> class="col-2 boxes">
+                        <b><a target="_blank" href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
                         <hr class="horizontal">
-                        
+
                         <p class="text"><b>Build Date </b>
                             <%= data[i].build_date%>
                         </p>
@@ -43,8 +44,8 @@
         <div class="row">
             <% if(data.length){ for(var i=0; i< data.length; i++) {%>
                 <% if (data[i].global_or_pod=='POD1' ) { %>
-                    <div class="col-2 boxes">
-                        <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
+                    <div color-status=<%=data[i].pod_status%> class="col-2 boxes">
+                        <b><a target="_blank" href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
                         <hr class="horizontal">
                         <p class="text"><b>Build Date </b>
                             <%= data[i].build_date%>
@@ -67,36 +68,44 @@
 
 
         </div>
-    </div>
-    <div class=" container data-table">
-
-        <div class="row">
-            <% if(data.length){ for(var i=0; i< data.length; i++) {%>
-                <% if (data[i].global_or_pod=='POD2' ) { %>
-                    <div class="col-2 boxes">
-                        <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
-                        <hr class="horizontal">
-                        <p class="text"><b>Build Date </b>
-                            <%= data[i].build_date%>
-                        </p>
-                        <p class="text"><b>Version </b>
-                            <%= data[i].image_version%>
-                        </p>
-                        <p class="text"><b>Refreshed At: </b>
-                            <%= data[i].refreshed_at%>
-                        </p>
-
-                    </div>
-                    <% } %>
-
-                        <% } }else{ %>
-                            <div class="col">
-                                <p>No user</p>
-                            </div>
-                            <% } %>
-
-
+        <div class="extra">
+            <p class="note"><b>* Note: </b> Services (autoscaler-service,ntt-service,azure-service,token-service) not supported in this pod</p>
         </div>
-    </div>
+        <article>
+            <marquee behavior="scroll" direction="left"><b>* Note: </b> Services (autoscaler-service,ntt-service,azure-service,token-service) not supported in this pod</marquee>
+            
+            <marquee behavior="scroll" direction="right"><b>* Note: </b> Services (autoscaler-service,ntt-service,azure-service,token-service) not supported in this pod</marquee>
+            </article>
 
-    <%- include('partials/footer.ejs') %>
+        <div class=" container data-table">
+
+            <div class="row">
+                <% if(data.length){ for(var i=0; i< data.length; i++) {%>
+                    <% if (data[i].global_or_pod=='POD2' ) { %>
+                        <div class="col-2 boxes">
+                            <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
+                            <hr class="horizontal">
+                            <p class="text"><b>Build Date </b>
+                                <%= data[i].build_date%>
+                            </p>
+                            <p class="text"><b>Version </b>
+                                <%= data[i].image_version%>
+                            </p>
+                            <p class="text"><b>Refreshed At: </b>
+                                <%= data[i].refreshed_at%>
+                            </p>
+
+                        </div>
+                        <% } %>
+
+                            <% } }else{ %>
+                                <div class="col">
+                                    <p>No user</p>
+                                </div>
+                                <% } %>
+
+
+            </div>
+        </div>
+
+        <%- include('partials/footer.ejs') %>

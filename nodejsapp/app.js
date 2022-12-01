@@ -65,15 +65,17 @@ var pod2 = ['REL', 'MREL', 'PATCH', 'UPGRADE']
 const global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'orgexpiry'];
 const pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime']
 
-const aws_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service'];
-const aws_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs','ac','runtime']
-const azure_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service'];
-const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'ntt-service', 'azure-service']
-const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'gcpmarketplace'];
-const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'gcp-service']
+const aws_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service','staticui','v3api'];
+const aws_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs','ac','runtime','token-service','ca-service','channel','cloudui','v3api','mona']
+const azure_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service','staticui','v3api'];
+const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'ntt-service', 'azure-service','token-service','ca-service','channel','cloudui','v3api','mona']
+const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service','staticui','v3api', 'gcpmarketplace'];
+const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'gcp-service','token-service','ca-service','channel','cloudui','v3api','mona']
 
 
 
+console.log(gcp_global_service_list.length)
+console.log(gcp_pod_service_list.length)
 
 var base_url = "https://qa-$$$.rel.infaqa.com/.../mgmtapi/version/";
 
@@ -273,17 +275,19 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
             if (rows.length == 0) {
 
               conn.query("INSERT INTO service_info (env_id,service_name, image_version,api_url,build_date,refreshed_at,created_date,active_flag,global_or_pod,pod_status) VALUES (?)", [[eid, name, ver, url, bd, lu, created_date, active_flag, global_or_pod,'G']], function (err, result) {
-                if (err) throw err;
+                if (err) {console.log("error in inserting")}
                 else
                   console.log("Record inserted:", name);
               });
             }
             else {
 
-              conn.query('UPDATE service_info SET ? WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', [{ service_name: name, api_url: url, image_version: ver, build_date: bd, refreshed_at: lu, active_flag: active_flag, global_or_pod: global_or_pod,pod_status:'G'}, name, eid, global_or_pod], (err, rows, fields) => {
+              conn.query('UPDATE service_info SET ? WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', [{ service_name: name, api_url: url, image_version: ver, build_date: bd, refreshed_at: lu, global_or_pod: global_or_pod}, name, eid, global_or_pod], (err, rows, fields) => {
                 // console.log(url);
                 // console.log(rows)
                 console.log("DB updated", name)
+              })
+              conn.query('UPDATE service_info SET pod_status = CASE WHEN timestampdiff(MINUTE,refreshed_at,utc_timestamp()) >= 30 THEN ? ELSE ? END WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', ['O','G', name, eid, global_or_pod], (err, rows, fields) => {
               })
             }
 
@@ -317,6 +321,23 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
   }).on("error", (err) => {
     console.log("Error here ")
     console.log("Error: " + err.message);
+    let lu = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+    conn.query("SELECT * FROM service_info WHERE service_name = ? AND env_id = ? and global_or_pod = ? ", [name, eid, global_or_pod], (err, rows, fields) => {
+      if (!err) {
+        
+        if(rows.length != 0) {
+          conn.query('UPDATE service_info SET ? WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', [{ service_name: name, api_url: url, image_version: 'Service Error'}, name, eid, global_or_pod], (err, rows, fields) => {
+            // console.log(url);
+            // console.log(rows)
+            console.log("DB updated", name)
+          })
+          conn.query('UPDATE service_info SET pod_status = CASE WHEN timestampdiff(MINUTE,refreshed_at,utc_timestamp()) >= 1 THEN ? ELSE ? END WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', ['O','G', name, eid, global_or_pod], (err, rows, fields) => {
+          })
+        }
+
+      }
+    })
   });
 
 
@@ -414,10 +435,10 @@ function addDataService_info() {
   }
 }
 
-
+addDataService_info();
 setInterval(function () {
   addDataService_info();
-}, 20000)
+}, 60000)
 
 // addDataEnvironment_info()
 app.use(bodyParser.urlencoded({ extended: true }));

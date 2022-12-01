@@ -11,8 +11,8 @@
         <div class="row">
             <% if(data.length){ for(var i=0; i< data.length; i++) {%>
                 <% if (data[i].global_or_pod=='GLOBAL' || data[i].global_or_pod=='COMMON') { %>
-                    <div class="col-2 boxes">
-                        <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
+                    <div color-status=<%=data[i].pod_status%> class="col-2 boxes">
+                        <b><a target="_blank" href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
                         <hr class="horizontal">
                         
                         <p class="text"><b>Build Date </b>
@@ -43,8 +43,8 @@
         <div class="row">
             <% if(data.length){ for(var i=0; i< data.length; i++) {%>
                 <% if (data[i].global_or_pod=='POD1' ) { %>
-                    <div class="col-2 boxes">
-                        <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
+                    <div color-status=<%=data[i].pod_status%> class="col-2 boxes">
+                        <b><a target="_blank"  href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
                         <hr class="horizontal">
                         <p class="text"><b>Build Date </b>
                             <%= data[i].build_date%>
@@ -74,7 +74,7 @@
         <div class="row">
             <% if(data.length){ for(var i=0; i< data.length; i++) {%>
                 <% if (data[i].global_or_pod=='POD2' ) { %>
-                    <div class="col-2 boxes">
+                    <div color-status=<%=data[i].pod_status%> class="col-2 boxes">
                         <b><a href=<%=data[i].api_url%>><%= data[i].service_name%> </a></b>
                         <hr class="horizontal">
                         <p class="text"><b>Build Date </b>

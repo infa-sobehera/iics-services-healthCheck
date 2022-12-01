@@ -24,4 +24,3 @@ Router.get("/", (req, res) => {
 });
 
 module.exports = Router;
-//build date ,service name,version,refreshed at
