@@ -1,9 +1,9 @@
 var mysql = require('mysql');
 
 var conn = mysql.createConnection({
-    host: "iics-qa-mgmt-api-rds.cce748qswozo.us-west-2.rds.amazonaws.com",
+    host: "localhost",
     user: "root",
-    password: "Infa1234",
+    password: "Infa@1234",
     database: "services",
     multipleStatements: true
 });
