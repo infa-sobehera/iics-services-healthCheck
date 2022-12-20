@@ -74,8 +74,6 @@ const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-s
 
 
 
-console.log(gcp_global_service_list.length)
-console.log(gcp_pod_service_list.length)
 
 var base_url = "https://qa-$$$.rel.infaqa.com/.../mgmtapi/version/";
 
@@ -168,15 +166,15 @@ function addDataEnvironment_info() {
             if (pod2_url != '') {
               conn.query("INSERT INTO environment_info (env_name, cloud_provider,global_url,common_url,pod1_url,pod2_url,created_date,active_flag) VALUES (?)", [[name, "AWS", global_url, common_url, pod1_url, pod2_url, dt, "Y"]], function (err, result) {
                 if (err) throw err;
-                else
-                  console.log("Record inserted:");
+                // else
+                  // console.log("Record inserted:");
               });
             }
             else {
               conn.query("INSERT INTO environment_info (env_name, cloud_provider,global_url,common_url,pod1_url,created_date,active_flag) VALUES (?)", [[name, "AWS", global_url, common_url, pod1_url, dt, "Y"]], function (err, result) {
                 if (err) throw err;
-                else
-                  console.log("Record inserted:");
+                // else
+                  // console.log("Record inserted:");
               });
             }
           }
@@ -275,7 +273,9 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
             if (rows.length == 0) {
 
               conn.query("INSERT INTO service_info (env_id,service_name, image_version,api_url,build_date,refreshed_at,created_date,active_flag,global_or_pod,pod_status) VALUES (?)", [[eid, name, ver, url, bd, lu, created_date, active_flag, global_or_pod,'G']], function (err, result) {
-                if (err) {console.log("error in inserting")}
+                if (err) {
+                  //pass
+                }
                 else
                   console.log("Record inserted:", name);
               });
@@ -285,7 +285,7 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
               conn.query('UPDATE service_info SET ? WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', [{ service_name: name, api_url: url, image_version: ver, build_date: bd, refreshed_at: lu, global_or_pod: global_or_pod}, name, eid, global_or_pod], (err, rows, fields) => {
                 // console.log(url);
                 // console.log(rows)
-                console.log("DB updated", name)
+                // console.log("DB updated", name)
               })
               conn.query('UPDATE service_info SET pod_status = CASE WHEN timestampdiff(MINUTE,refreshed_at,utc_timestamp()) >= 30 THEN ? ELSE ? END WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', ['O','G', name, eid, global_or_pod], (err, rows, fields) => {
               })
@@ -308,7 +308,7 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
               conn.query('UPDATE service_info SET ? WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', [{image_version: ver1, refreshed_at: lu, active_flag: active_flag ,pod_status:'R'}, name, eid, global_or_pod], (err, rows, fields) => {
                 // console.log(url);
                 // console.log(rows)
-                console.log("DB updated", name)
+                // console.log("DB updated", name)
               })
             }
 
@@ -319,7 +319,6 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
     });
 
   }).on("error", (err) => {
-    console.log("Error here ")
     console.log("Error: " + err.message);
     let lu = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
@@ -330,7 +329,7 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
           conn.query('UPDATE service_info SET ? WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', [{ service_name: name, api_url: url, image_version: 'Service Error'}, name, eid, global_or_pod], (err, rows, fields) => {
             // console.log(url);
             // console.log(rows)
-            console.log("DB updated", name)
+            // console.log("DB updated", name)
           })
           conn.query('UPDATE service_info SET pod_status = CASE WHEN timestampdiff(MINUTE,refreshed_at,utc_timestamp()) >= 1 THEN ? ELSE ? END WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', ['O','G', name, eid, global_or_pod], (err, rows, fields) => {
           })
