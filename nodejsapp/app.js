@@ -265,7 +265,6 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
         var id = attributes[4].split("=")[1];
         id = parseInt(id);
         let lu = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        // console.log(lu)
         // console.log(url,typeof(ver), typeof(id));
 
         conn.query("SELECT * FROM service_info WHERE service_name = ? AND env_id = ? and global_or_pod = ? ", [name, eid, global_or_pod], (err, rows, fields) => {
@@ -319,7 +318,7 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
     });
 
   }).on("error", (err) => {
-    console.log("Error: " + err.message);
+    // console.log("Error: " + err.message);
     let lu = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     conn.query("SELECT * FROM service_info WHERE service_name = ? AND env_id = ? and global_or_pod = ? ", [name, eid, global_or_pod], (err, rows, fields) => {
@@ -439,6 +438,8 @@ setInterval(function () {
   addDataService_info();
 }, 60000)
 
+
+
 // addDataEnvironment_info()
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -446,3 +447,4 @@ app.use(express.static("public"));
 app.listen(app.get("port"), "0.0.0.0", function () {
   console.log("Server started on port " + app.get("port"));
 });
+

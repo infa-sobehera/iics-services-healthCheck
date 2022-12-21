@@ -6,6 +6,7 @@ var conn = mysql.createConnection({
     // password: "prameet",
     password:"Infa@1234",
     database: "services",
+    timezone: 'utc',
     multipleStatements: true
 });
 
