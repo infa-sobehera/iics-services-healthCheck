@@ -3,8 +3,8 @@ var mysql = require('mysql');
 var conn = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "prameet",
-    // password:"Infa@1234",
+    // password: "prameet",
+    password:"Infa@1234",
     database: "services",
     timezone: 'utc',
     multipleStatements: true
