@@ -1,6 +1,8 @@
 var express = require("express");
 var bodyParser = require("body-parser")
 var path = require("path");
+const nodemailer = require('nodemailer');
+
 var routes = require("./routes/aws/routes");
 var routes_aws_mrel = require("./routes/aws/r_mrel");
 var routes_aws_ml = require("./routes/aws/ml");
@@ -76,7 +78,7 @@ const aws_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-s
 const azure_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui'];
 const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'ntt-service', 'azure-service', 'token-service', 'ca-service', 'channel', 'mona']
 const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'gcpmarketplace'];
-const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'gcp-service', 'token-service', 'ca-service', 'channel', 'mona']
+const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona']
 
 
 
@@ -445,6 +447,7 @@ addDataService_info();
 setInterval(function () {
   addDataService_info();
 }, 60000)
+
 
 
 
