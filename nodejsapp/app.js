@@ -73,11 +73,11 @@ var pod2 = ['REL', 'MREL', 'PATCH', 'UPGRADE']
 const global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'orgexpiry'];
 const pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime']
 
-const aws_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui'];
+const aws_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui','identity-service'];
 const aws_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona']
-const azure_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui'];
+const azure_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui','identity-service'];
 const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'ntt-service', 'azure-service', 'token-service', 'ca-service', 'channel', 'mona']
-const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'gcpmarketplace'];
+const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'gcpmarketplace','identity-service'];
 const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona']
 
 
@@ -357,23 +357,23 @@ function genrateServiceURL(cloud_provider, eid, global_url, common_url, pod1_url
 
     for (let i = 0; i < aws_global_service_list.length; i++) {
       if (aws_global_service_list[i] == 'package-manager') {
-        var url = common_url + '/' + aws_global_service_list[i] + '/mgmtapi/version/';
+        var url = common_url + '/' + aws_global_service_list[i] + '/mgmtapi/version';
         updateDataService_info(eid, aws_global_service_list[i], url, created_date, active_flag, 'COMMON')
       }
       else {
-        var url = global_url + '/' + aws_global_service_list[i] + '/mgmtapi/version/';
+        var url = global_url + '/' + aws_global_service_list[i] + '/mgmtapi/version';
         updateDataService_info(eid, aws_global_service_list[i], url, created_date, active_flag, 'GLOBAL')
       }
     }
 
     for (let i = 0; i < aws_pod_service_list.length; i++) {
-      var p1url = pod1_url + '/' + aws_pod_service_list[i] + '/mgmtapi/version/';
+      var p1url = pod1_url + '/' + aws_pod_service_list[i] + '/mgmtapi/version';
       // console.log(p1url)
       updateDataService_info(eid, aws_pod_service_list[i], p1url, created_date, active_flag, 'POD1')
     }
     for (let i = 0; i < aws_pod_service_list.length; i++) {
       if (pod2_url != null) {
-        var p2url = pod2_url + '/' + aws_pod_service_list[i] + '/mgmtapi/version/';
+        var p2url = pod2_url + '/' + aws_pod_service_list[i] + '/mgmtapi/version';
         updateDataService_info(eid, aws_pod_service_list[i], p2url, created_date, active_flag, 'POD2')
       }
     }
@@ -382,17 +382,17 @@ function genrateServiceURL(cloud_provider, eid, global_url, common_url, pod1_url
   if (cloud_provider == 'AZURE') {
     for (let i = 0; i < azure_global_service_list.length; i++) {
       if (azure_global_service_list[i] == 'package-manager') {
-        var url = common_url + '/' + azure_global_service_list[i] + '/mgmtapi/version/';
+        var url = common_url + '/' + azure_global_service_list[i] + '/mgmtapi/version';
         updateDataService_info(eid, azure_global_service_list[i], url, created_date, active_flag, 'COMMON')
       }
       else {
-        var url = global_url + '/' + azure_global_service_list[i] + '/mgmtapi/version/';
+        var url = global_url + '/' + azure_global_service_list[i] + '/mgmtapi/version';
         updateDataService_info(eid, azure_global_service_list[i], url, created_date, active_flag, 'GLOBAL')
       }
     }
 
     for (let i = 0; i < azure_pod_service_list.length; i++) {
-      var p1url = pod1_url + '/' + azure_pod_service_list[i] + '/mgmtapi/version/';
+      var p1url = pod1_url + '/' + azure_pod_service_list[i] + '/mgmtapi/version';
       // console.log(p1url)
       updateDataService_info(eid, azure_pod_service_list[i], p1url, created_date, active_flag, 'POD1')
     }
@@ -400,17 +400,17 @@ function genrateServiceURL(cloud_provider, eid, global_url, common_url, pod1_url
   if (cloud_provider == 'GCP') {
     for (let i = 0; i < gcp_global_service_list.length; i++) {
       if (gcp_global_service_list[i] == 'package-manager') {
-        var url = common_url + '/' + gcp_global_service_list[i] + '/mgmtapi/version/';
+        var url = common_url + '/' + gcp_global_service_list[i] + '/mgmtapi/version';
         updateDataService_info(eid, gcp_global_service_list[i], url, created_date, active_flag, 'COMMON')
       }
       else {
-        var url = global_url + '/' + gcp_global_service_list[i] + '/mgmtapi/version/';
+        var url = global_url + '/' + gcp_global_service_list[i] + '/mgmtapi/version';
         updateDataService_info(eid, gcp_global_service_list[i], url, created_date, active_flag, 'GLOBAL')
       }
     }
 
     for (let i = 0; i < gcp_pod_service_list.length; i++) {
-      var p1url = pod1_url + '/' + gcp_pod_service_list[i] + '/mgmtapi/version/';
+      var p1url = pod1_url + '/' + gcp_pod_service_list[i] + '/mgmtapi/version';
       updateDataService_info(eid, gcp_pod_service_list[i], p1url, created_date, active_flag, 'POD1')
     }
   }
