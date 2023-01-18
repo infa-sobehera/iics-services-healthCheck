@@ -61,10 +61,31 @@ app.use("/gcp_mrel", routes_gcp_mrel)
 app.use("/gcp_patch", routes_gcp_patch)
 app.use("/gcp_upgrade", routes_gcp_upgrade)
 
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'pupadhyay.infa@gmail.com',
+    pass: 'arfgafujveyfzuwc'
+  }
+});
 
-const env = ['REL', 'ML', 'MREL', 'PATCH', 'EBF', 'UPGRADE', 'FEDRAMP', 'FEDRAMP_MREL','PERFORMANCE','DEV_PERF']
+// var transporter = nodemailer.createTransport({
+//   host: "smtp.office.365.com",
+//   port: 25,
+//   secure: false, // upgrade later with STARTTLS
+//   auth: {
+//     user: "admin@informaticacloud.com",
+//     pass: "",
+//   },
+// })
+
+
+
+
+
+const env = ['REL', 'ML', 'MREL', 'PATCH', 'EBF', 'UPGRADE', 'FEDRAMP', 'FEDRAMP_MREL', 'PERFORMANCE', 'DEV_PERF']
 //EA left
-var AWS_env_dict = { 'REL': 'rel', 'ML': 'ml', 'MREL': 'mrel', 'PATCH': 'patch', 'EBF': 'ebf', 'UPGRADE': 'upgrade', 'EA': 'ea', 'FEDRAMP': 'qa', 'FEDRAMP_MREL': 'qa-mrel','PERFORMANCE':'perf','DEV_PERF':'devperf' }
+var AWS_env_dict = { 'REL': 'rel', 'ML': 'ml', 'MREL': 'mrel', 'PATCH': 'patch', 'EBF': 'ebf', 'UPGRADE': 'upgrade', 'EA': 'ea', 'FEDRAMP': 'qa', 'FEDRAMP_MREL': 'qa-mrel', 'PERFORMANCE': 'perf', 'DEV_PERF': 'devperf' }
 var GCP_env_dict = { 'REL': 'crel2', 'MREL': 'mrel2', 'PATCH': 'rel2', 'UPGRADE': 'upgrade2' }
 var AZURE_env_dict = { 'REL': 'rel1', 'MREL': 'mrel1', 'PATCH': 'rel-azure', 'UPGRADE': 'upgrade1' }
 var pod2 = ['REL', 'MREL', 'PATCH', 'UPGRADE']
@@ -73,11 +94,11 @@ var pod2 = ['REL', 'MREL', 'PATCH', 'UPGRADE']
 const global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'orgexpiry'];
 const pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime']
 
-const aws_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui','identity-service'];
+const aws_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'identity-service'];
 const aws_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona']
-const azure_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui','identity-service'];
+const azure_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'identity-service'];
 const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'ntt-service', 'azure-service', 'token-service', 'ca-service', 'channel', 'mona']
-const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'gcpmarketplace','identity-service'];
+const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'gcpmarketplace', 'identity-service'];
 const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona']
 
 
@@ -304,15 +325,32 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
       }
       else {
         let lu = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        
+
 
         // console.log(lu)
         // console.log(url,typeof(ver), typeof(id));
 
         conn.query("SELECT * FROM service_info WHERE service_name = ? AND env_id = ? and global_or_pod = ? ", [name, eid, global_or_pod], (err, rows, fields) => {
           if (!err) {
-
             if (rows.length != 0) {
+              let failed_env_name = ''
+              // conn.query('SELECT env_name FROM environment_info WHERE env_id = ?', eid, (err, rows, fields) => {
+              //   var mailOptions = {
+              //     from: 'admin@informaticacloud.com',
+              //     to: 'pupadhyay@informatica.com',
+              //     subject: 'Service Down: ' + name,
+              //     text: 'Service Down: ' + name + '\nLast Updated: ' + lu + ' \nEnv: ' + rows[0]['env_name']
+              //   };
+              //   transporter.sendMail(mailOptions, function (error, info) {
+              //     if (error) {
+              //       console.log(error);
+              //     } else {
+              //       console.log('Email sent: ' + info.response);
+              //     }
+              //   });
+              // })
+
+
               let ver1 = "Service Unvavilable"
               conn.query('UPDATE service_info SET ? WHERE service_name = ? AND env_id = ? AND global_or_pod = ?', [{ image_version: ver1, refreshed_at: lu, active_flag: active_flag, pod_status: 'R' }, name, eid, global_or_pod], (err, rows, fields) => {
                 // console.log(url);

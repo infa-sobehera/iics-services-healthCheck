@@ -2,9 +2,11 @@ var mysql = require('mysql');
 
 var conn = mysql.createConnection({
     host: "localhost",
-    user: "root",
+    // user: "root",
+    user: "infa",
+
     // password: "prameet",
-    password:"Infa@1234",
+    password:"Infa@12345",
     database: "services",
     timezone: 'utc',
     multipleStatements: true
