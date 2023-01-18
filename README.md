@@ -17,10 +17,20 @@
 
 1. Perform a quick update on your instance:\
    `sudo yum update -y`
-2. Install git in your EC2 instance\
+2. Install git in your instance\
    `sudo yum install git -y`
 3. Check git version\
   `git version`
+  
 
+## Install MySQL on VM
+1. Perform a quick update on your instance:\
+   `sudo yum update -y`
+2. Install MySQL in your instance\
+   `sudo yum install mysql-server`
+3. Check mysql version\
+  `mysql -v`
+4. Login into mysql\
+   `mysql -u root`
 
 
