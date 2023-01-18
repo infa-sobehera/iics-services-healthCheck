@@ -33,4 +33,9 @@
 4. Login into mysql\
    `mysql -u root`
 
-
+## Start the server
+1. Go to the app directory 
+   `cd iics-services-healthCheck/nodejsapp`
+2. Run the node server
+   `npm start`
+3. The server would be running now.
