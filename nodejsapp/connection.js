@@ -1,12 +1,12 @@
 var mysql = require('mysql');
+var pass = ''
 
+const fs = require('fs')
+var cred = fs.readFileSync("credentials.txt").toString().split(/\r?\n/);
 var conn = mysql.createConnection({
     host: "localhost",
-    // user: "root",
-    user: "infa",
-
-    // password: "prameet",
-    password:"Infa@12345",
+    user: cred[0],
+    password: cred[1],
     database: "services",
     timezone: 'utc',
     multipleStatements: true

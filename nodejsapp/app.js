@@ -2,6 +2,7 @@ var express = require("express");
 var bodyParser = require("body-parser")
 var path = require("path");
 const nodemailer = require('nodemailer');
+const fs = require('fs')
 
 var routes = require("./routes/aws/routes");
 var routes_aws_mrel = require("./routes/aws/r_mrel");
@@ -61,21 +62,21 @@ app.use("/gcp_mrel", routes_gcp_mrel)
 app.use("/gcp_patch", routes_gcp_patch)
 app.use("/gcp_upgrade", routes_gcp_upgrade)
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'pupadhyay.infa@gmail.com',
-    pass: 'arfgafujveyfzuwc'
-  }
-});
+// var transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: 'pupadhyay.infa@gmail.com',
+//     pass: 'arfgafujveyfzuwc'
+//   }
+// });
 
 // var transporter = nodemailer.createTransport({
 //   host: "smtp.office.365.com",
 //   port: 25,
 //   secure: false, // upgrade later with STARTTLS
 //   auth: {
-//     user: "admin@informaticacloud.com",
-//     pass: "",
+//     user: 'pupadhyay.infa@gmail.com',
+//     pass: "Uprameet@1106",
 //   },
 // })
 
@@ -92,12 +93,12 @@ var pod2 = ['REL', 'MREL', 'PATCH', 'UPGRADE']
 
 
 const global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'orgexpiry'];
-const pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime']
+const pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime','cis']
 
 const aws_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'identity-service'];
-const aws_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona']
+const aws_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona','cis']
 const azure_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'identity-service'];
-const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'ntt-service', 'azure-service', 'token-service', 'ca-service', 'channel', 'mona']
+const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'ntt-service', 'azure-service', 'token-service', 'ca-service', 'channel', 'mona','cis']
 const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'gcpmarketplace', 'identity-service'];
 const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona']
 
@@ -143,6 +144,8 @@ var base_url = "https://qa-$$$.rel.infaqa.com/.../mgmtapi/version/";
 
 //adding data into environment_info table
 //data would be only inserted if the table is empty 
+
+
 
 
 function addDataEnvironment_info() {
@@ -336,7 +339,7 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
               let failed_env_name = ''
               // conn.query('SELECT env_name FROM environment_info WHERE env_id = ?', eid, (err, rows, fields) => {
               //   var mailOptions = {
-              //     from: 'admin@informaticacloud.com',
+              //     from: 'pupadhyay.infa@gmail.com',
               //     to: 'pupadhyay@informatica.com',
               //     subject: 'Service Down: ' + name,
               //     text: 'Service Down: ' + name + '\nLast Updated: ' + lu + ' \nEnv: ' + rows[0]['env_name']
@@ -481,11 +484,19 @@ function addDataService_info() {
   }
 }
 
+
 addDataService_info();
 setInterval(function () {
   addDataService_info();
-}, 60000)
+}, 300000)
 
+// var pass =  ''
+
+// fs.readFileSync('pass.txt',(err,data) => {
+//   console.log(data.toString());
+//   pass = data.toString();
+//   console.log(data.toString());
+// })
 
 
 

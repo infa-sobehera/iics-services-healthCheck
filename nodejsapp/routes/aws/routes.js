@@ -1,7 +1,6 @@
 var express = require("express");
 var Router = express.Router();
 var conn = require('../../connection')
-
 var https = require('https');
 const { type } = require("os");
 const { resolveAny } = require("dns");
