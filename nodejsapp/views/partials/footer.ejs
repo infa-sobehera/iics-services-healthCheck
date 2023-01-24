@@ -27,16 +27,27 @@
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
     }
-    // function counter_fn() {
-    //     var counterElement = document.getElementById("cntr")
-    //     var counterNumber = parseInt(counterElement.innerHTML)
-    //     counterNumber = counterNumber + 1
-    //     counterElement.innerHTML = counterNumber
-    // }
-
-       
-
     
+
+    const searchFunc = () =>{
+        let filter = document.getElementById('myInput').value.toUpperCase();
+        let bx = document.getElementsByClassName('boxes');
+        for (i = 0; i < bx.length; i++) {
+            let service_bx  = bx[i].getElementsByTagName('a')[0];
+            if(service_bx){
+                let serv_name = service_bx.textContent || service_bx.innerHTML;
+                console.log("here")
+                if(serv_name.toUpperCase().indexOf(filter) > -1){
+                    bx[i].style.display = "" 
+                }
+                else{
+                    bx[i].style.display = "none";
+                }
+            }
+        }
+
+        }
+
 </script>
 
 
