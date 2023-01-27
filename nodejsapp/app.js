@@ -3,7 +3,7 @@ var bodyParser = require("body-parser")
 var path = require("path");
 const nodemailer = require('nodemailer');
 const fs = require('fs')
-
+const countapi  =  require('countapi-js')
 var routes = require("./routes/aws/routes");
 var routes_aws_mrel = require("./routes/aws/r_mrel");
 var routes_aws_ml = require("./routes/aws/ml");
@@ -82,7 +82,9 @@ app.use("/gcp_upgrade", routes_gcp_upgrade)
 
 
 
-
+// countapi.countapi.visits.then((result) =>{
+//   console.log(result.value)
+// })
 
 const env = ['REL', 'ML', 'MREL', 'PATCH', 'EBF', 'UPGRADE', 'FEDRAMP', 'FEDRAMP_MREL', 'PERFORMANCE', 'DEV_PERF']
 //EA left
@@ -102,7 +104,11 @@ const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler
 const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'gcpmarketplace', 'identity-service'];
 const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona','cloudshell']
 
+list = []
 
+conn.query("SELECT * FROM service_info",(err, rows) => {
+  console.log(rows[0]);
+});
 
 
 var base_url = "https://qa-$$$.rel.infaqa.com/.../mgmtapi/version/";

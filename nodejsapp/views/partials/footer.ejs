@@ -27,12 +27,33 @@
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
     }
-    // function counter_fn() {
-    //     var counterElement = document.getElementById("cntr")
-    //     var counterNumber = parseInt(counterElement.innerHTML)
-    //     counterNumber = counterNumber + 1
-    //     counterElement.innerHTML = counterNumber
+    
+
+    // const pageViewsCount  = document.getElementById('pageviews-count')
+    // const visitsCount = document.getElementById('visits-count')
+
+    // if(sessionStorage.getItem('visit') == null){
+    //     //new visit
+    //     updateCount('type=visit-pageview')
     // }
+    // else{
+    //     //page view
+    //     updateCount('type=pageview')
+    // }
+
+    // function updateCount(){
+    //     fetch('http://127.0.0.1:3000?'+type)
+    //     .then(res  => res.json())
+    //     .then(data =>{
+    //         pageViewsCount.textContent = data.pageviews;
+    //         visitsCount.textContent = data.visits;
+    //     })
+    // }
+    // sessionStorage.setItem('visit', 'x')
+
+    function websiteVisits(response){
+        document.querySelector('#visits').textContent = response.value;
+    }
 
        
 
