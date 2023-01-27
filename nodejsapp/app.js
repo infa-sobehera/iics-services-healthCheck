@@ -93,14 +93,14 @@ var pod2 = ['REL', 'MREL', 'PATCH', 'UPGRADE']
 
 
 const global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'orgexpiry'];
-const pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime','cis']
+const pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'cis']
 
 const aws_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'identity-service'];
-const aws_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona','cis','cloudshell']
+const aws_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona', 'cis', 'cloudshell']
 const azure_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'identity-service'];
-const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'ntt-service', 'azure-service', 'token-service', 'ca-service', 'channel', 'mona','cis','cloudshell']
+const azure_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'ntt-service', 'azure-service', 'token-service', 'ca-service', 'channel', 'mona', 'cis', 'cloudshell']
 const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry', 'branding-service', 'content-repo', 'ma', 'scim-service', 'staticui', 'gcpmarketplace', 'identity-service'];
-const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona','cloudshell']
+const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona', 'cloudshell']
 
 
 
@@ -302,7 +302,6 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
         conn.query("SELECT * FROM service_info WHERE service_name = ? AND env_id = ? and global_or_pod = ? ", [name, eid, global_or_pod], (err, rows, fields) => {
           if (!err) {
             if (rows.length == 0) {
-
               conn.query("INSERT INTO service_info (env_id,service_name, image_version,api_url,build_date,refreshed_at,created_date,active_flag,global_or_pod,pod_status) VALUES (?)", [[eid, name, ver, url, bd, lu, created_date, active_flag, global_or_pod, 'G']], function (err, result) {
                 if (err) {
                   //pass
@@ -393,95 +392,104 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
 }
 
 //genrates the  API url for all the services in a environments and then calls updateDataService_info function
-function genrateServiceURL(cloud_provider, eid, global_url, common_url, pod1_url, pod2_url, created_date, active_flag) {
-  if (cloud_provider == 'AWS') {
+function genrateServiceURL(env, cloud_provider, eid, global_url, common_url, pod1_url, pod2_url, created_date, active_flag) {
 
-    for (let i = 0; i < aws_global_service_list.length; i++) {
-      if (aws_global_service_list[i] == 'package-manager') {
-        var url = common_url + '/' + aws_global_service_list[i] + '/mgmtapi/version';
-        updateDataService_info(eid, aws_global_service_list[i], url, created_date, active_flag, 'COMMON')
-      }
-      else {
-        var url = global_url + '/' + aws_global_service_list[i] + '/mgmtapi/version';
-        updateDataService_info(eid, aws_global_service_list[i], url, created_date, active_flag, 'GLOBAL')
-      }
+  conn.query('SELECT * from service_info where env_id = ? ', [eid], (err, rows) => {
+    for (let i = 0; i < rows.length; i++) {
+      updateDataService_info(eid, rows[i].service_name, rows[i].api_url, rows[i].created_date, rows[i].active_flag, rows[i].global_or_pod)
     }
+  });
+  // for (let i = 0; i < aws_global_service_list.length; i++) {
+  //   if (aws_global_service_list[i] == 'package-manager') {
+  //     var url = common_url + '/' + aws_global_service_list[i] + '/mgmtapi/version';
+  //     updateDataService_info(eid, aws_global_service_list[i], url, created_date, active_flag, 'COMMON')
+  //   }
+  //   else {
+  //     var url = global_url + '/' + aws_global_service_list[i] + '/mgmtapi/version';
+  //     updateDataService_info(eid, aws_global_service_list[i], url, created_date, active_flag, 'GLOBAL')
+  //   }
+  // }
 
-    for (let i = 0; i < aws_pod_service_list.length; i++) {
-      var p1url = pod1_url + '/' + aws_pod_service_list[i] + '/mgmtapi/version';
-      // console.log(p1url)
-      updateDataService_info(eid, aws_pod_service_list[i], p1url, created_date, active_flag, 'POD1')
-    }
-    for (let i = 0; i < aws_pod_service_list.length; i++) {
-      if (pod2_url != null) {
-        var p2url = pod2_url + '/' + aws_pod_service_list[i] + '/mgmtapi/version';
-        updateDataService_info(eid, aws_pod_service_list[i], p2url, created_date, active_flag, 'POD2')
-      }
-    }
+  // for (let i = 0; i < aws_pod_service_list.length; i++) {
+  //   var p1url = pod1_url + '/' + aws_pod_service_list[i] + '/mgmtapi/version';
+  //   // console.log(p1url)
+  //   updateDataService_info(eid, aws_pod_service_list[i], p1url, created_date, active_flag, 'POD1')
+  // }
+  // for (let i = 0; i < aws_pod_service_list.length; i++) {
+  //   if (pod2_url != null) {
+  //     var p2url = pod2_url + '/' + aws_pod_service_list[i] + '/mgmtapi/version';
+  //     updateDataService_info(eid, aws_pod_service_list[i], p2url, created_date, active_flag, 'POD2')
+  //   }
+  // }
+  // if (cloud_provider == 'AZURE') {
+  //   for (let i = 0; i < azure_global_service_list.length; i++) {
+  //     if (azure_global_service_list[i] == 'package-manager') {
+  //       var url = common_url + '/' + azure_global_service_list[i] + '/mgmtapi/version';
+  //       updateDataService_info(eid, azure_global_service_list[i], url, created_date, active_flag, 'COMMON')
+  //     }
+  //     else {
+  //       var url = global_url + '/' + azure_global_service_list[i] + '/mgmtapi/version';
+  //       updateDataService_info(eid, azure_global_service_list[i], url, created_date, active_flag, 'GLOBAL')
+  //     }
+  //   }
 
-  }
-  if (cloud_provider == 'AZURE') {
-    for (let i = 0; i < azure_global_service_list.length; i++) {
-      if (azure_global_service_list[i] == 'package-manager') {
-        var url = common_url + '/' + azure_global_service_list[i] + '/mgmtapi/version';
-        updateDataService_info(eid, azure_global_service_list[i], url, created_date, active_flag, 'COMMON')
-      }
-      else {
-        var url = global_url + '/' + azure_global_service_list[i] + '/mgmtapi/version';
-        updateDataService_info(eid, azure_global_service_list[i], url, created_date, active_flag, 'GLOBAL')
-      }
-    }
+  //   for (let i = 0; i < azure_pod_service_list.length; i++) {
+  //     var p1url = pod1_url + '/' + azure_pod_service_list[i] + '/mgmtapi/version';
+  //     // console.log(p1url)
+  //     updateDataService_info(eid, azure_pod_service_list[i], p1url, created_date, active_flag, 'POD1')
+  //   }
+  // }
+  // if (cloud_provider == 'GCP') {
+  //   for (let i = 0; i < gcp_global_service_list.length; i++) {
+  //     if (gcp_global_service_list[i] == 'package-manager') {
+  //       var url = common_url + '/' + gcp_global_service_list[i] + '/mgmtapi/version';
+  //       updateDataService_info(eid, gcp_global_service_list[i], url, created_date, active_flag, 'COMMON')
+  //     }
+  //     else {
+  //       var url = global_url + '/' + gcp_global_service_list[i] + '/mgmtapi/version';
+  //       updateDataService_info(eid, gcp_global_service_list[i], url, created_date, active_flag, 'GLOBAL')
+  //     }
+  //   }
 
-    for (let i = 0; i < azure_pod_service_list.length; i++) {
-      var p1url = pod1_url + '/' + azure_pod_service_list[i] + '/mgmtapi/version';
-      // console.log(p1url)
-      updateDataService_info(eid, azure_pod_service_list[i], p1url, created_date, active_flag, 'POD1')
-    }
-  }
-  if (cloud_provider == 'GCP') {
-    for (let i = 0; i < gcp_global_service_list.length; i++) {
-      if (gcp_global_service_list[i] == 'package-manager') {
-        var url = common_url + '/' + gcp_global_service_list[i] + '/mgmtapi/version';
-        updateDataService_info(eid, gcp_global_service_list[i], url, created_date, active_flag, 'COMMON')
-      }
-      else {
-        var url = global_url + '/' + gcp_global_service_list[i] + '/mgmtapi/version';
-        updateDataService_info(eid, gcp_global_service_list[i], url, created_date, active_flag, 'GLOBAL')
-      }
-    }
-
-    for (let i = 0; i < gcp_pod_service_list.length; i++) {
-      var p1url = pod1_url + '/' + gcp_pod_service_list[i] + '/mgmtapi/version';
-      updateDataService_info(eid, gcp_pod_service_list[i], p1url, created_date, active_flag, 'POD1')
-    }
-  }
+  //   for (let i = 0; i < gcp_pod_service_list.length; i++) {
+  //     var p1url = pod1_url + '/' + gcp_pod_service_list[i] + '/mgmtapi/version';
+  //     updateDataService_info(eid, gcp_pod_service_list[i], p1url, created_date, active_flag, 'POD1')
+  //   }
+  // }
 }
+
 
 
 //names all the environments and queries all the data from the environment_info table and calls genrateServiceURL function
 function addDataService_info() {
-  for (let i = 0; i < env.length; i++) {
-    const ename = "AWS_" + env[i];
-    conn.query("SELECT * FROM environment_info WHERE env_name = ?", [ename], (err, rows, fields) => {
-      genrateServiceURL(rows[0].cloud_provider, rows[0].env_id, rows[0].global_url, rows[0].common_url, rows[0].pod1_url, rows[0].pod2_url, rows[0].created_date, rows[0].active_flag)
-    })
-    const ename2 = "AZURE_" + env[i];
-    conn.query("SELECT * FROM environment_info WHERE env_name = ?", [ename2], (err, rows, fields) => {
-      if (rows.length) {
-        // console.log(ename2)
 
-        genrateServiceURL(rows[0].cloud_provider, rows[0].env_id, rows[0].global_url, rows[0].common_url, rows[0].pod1_url, rows[0].pod2_url, rows[0].created_date, rows[0].active_flag)
-      }
-    })
-    const ename3 = "GCP_" + env[i];
-    conn.query("SELECT * FROM environment_info WHERE env_name = ?", [ename3], (err, rows, fields) => {
-      if (rows.length) {
-        // console.log(ename3)
+  conn.query('SELECT * from environment_info', (err, rows) => {
+    for (let i = 0; i < rows.length; i++) {
+      genrateServiceURL(rows[i].env_name, rows[i].cloud_provider, rows[i].env_id, rows[i].global_url, rows[i].common_url, rows[i].pod1_url, rows[i].pod2_url, rows[i].created_date, rows[i].active_flag)
+    }
+  });
+  // for (let i = 0; i < env.length; i++) {
+  //   const ename = "AWS_" + env[i];
+  //   conn.query("SELECT * FROM environment_info WHERE env_name = ?", [ename], (err, rows, fields) => {
+  //     genrateServiceURL(rows[0].cloud_provider, rows[0].env_id, rows[0].global_url, rows[0].common_url, rows[0].pod1_url, rows[0].pod2_url, rows[0].created_date, rows[0].active_flag)
+  //   })
+  //   const ename2 = "AZURE_" + env[i];
+  //   conn.query("SELECT * FROM environment_info WHERE env_name = ?", [ename2], (err, rows, fields) => {
+  //     if (rows.length) {
+  //       // console.log(ename2)
 
-        genrateServiceURL(rows[0].cloud_provider, rows[0].env_id, rows[0].global_url, rows[0].common_url, rows[0].pod1_url, rows[0].pod2_url, rows[0].created_date, rows[0].active_flag)
-      }
-    })
-  }
+  //       genrateServiceURL(rows[0].cloud_provider, rows[0].env_id, rows[0].global_url, rows[0].common_url, rows[0].pod1_url, rows[0].pod2_url, rows[0].created_date, rows[0].active_flag)
+  //     }
+  //   })
+  //   const ename3 = "GCP_" + env[i];
+  //   conn.query("SELECT * FROM environment_info WHERE env_name = ?", [ename3], (err, rows, fields) => {
+  //     if (rows.length) {
+  //       // console.log(ename3)
+
+  //       genrateServiceURL(rows[0].cloud_provider, rows[0].env_id, rows[0].global_url, rows[0].common_url, rows[0].pod1_url, rows[0].pod2_url, rows[0].created_date, rows[0].active_flag)
+  //     }
+  //   })
+  // }
 }
 
 
