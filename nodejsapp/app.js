@@ -103,9 +103,46 @@ const gcp_global_service_list = ['package-manager', 'authz-service', 'orgexpiry'
 const gcp_pod_service_list = ['admin-service', 'auditlog-service', 'autoscaler-service', 'bundle-service', 'callback-service', 'frs', 'jls-di', 'kms-service', 'license-service', 'ldm', 'migration', 'notification-service', 'p2pms', 'preference-service', 'scheduler-service', 'session-service', 'vcs', 'ac', 'runtime', 'token-service', 'ca-service', 'channel', 'mona','cloudshell','cloudUI','cis']
 
 
-
 var base_url = "https://qa-$$$.rel.infaqa.com/.../mgmtapi/version/";
 
+
+function sendMailForUptime() {
+  let timeStamp = new Date().toLocaleString();
+  serv_name = 'identity-service'
+  img_ver = ''
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'pupadhyay.infa@gmail.com',
+      pass: 'arfgafujveyfzuwc'
+    }
+  });
+  conn.query("SELECT * FROM service_info WHERE service_name = ? AND env_id = ?", ['identity-service', 1], (err, rows, fields) => {
+    if (!err) {
+      if (rows.length == 0) {
+        img_ver = 'not_updated'
+      }
+      else {
+        var mailList = ['pupadhyay@informatica.com','rneela@informatica.com']
+        var mailOptions = {
+          from: 'pupadhyay.infa@gmail.com',
+          to: mailList,
+          subject: 'QA-MGMT Dashboard Status',
+          text: 'QA-MGMT Dashboard is up and running on :' + timeStamp  + '\nExample Service Output:\nENV : AWS_REL\nSERVICE NAME : IDENTITY-SERVICE\n' + 'IMAGE-VERSION : ' + rows[0].image_version
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+        // console.log(rows[0])
+
+      }
+    }
+  })
+}
 
 
 
@@ -286,7 +323,7 @@ function updateDataService_info(eid, name, url, created_date, active_flag, globa
     // The whole response has been received. Print out the result.
     resp.on('end', () => {
 
-      if (data.search("Service Unavailable") == -1) {
+      if (data.search("Service Unavailable") == -1 && data.search("403 Forbidden") == -1) {
         data = data.split("\"").join("");
         data = data.split("\\n").join("\n")
         // console.log(data)
@@ -488,6 +525,13 @@ addDataService_info();
 setInterval(function () {
   addDataService_info();
 }, 300000)
+
+sendMailForUptime()
+setInterval(function () {
+  sendMailForUptime()
+}, 86400000);
+
+
 
 // var pass =  ''
 
