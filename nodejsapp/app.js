@@ -529,7 +529,7 @@ setInterval(function () {
 sendMailForUptime()
 setInterval(function () {
   sendMailForUptime()
-}, 86400000);
+}, 60000);
 
 
 
