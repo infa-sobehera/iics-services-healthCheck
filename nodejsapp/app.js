@@ -487,7 +487,7 @@ function addDataService_info() {
 addDataService_info();
 setInterval(function () {
   addDataService_info();
-}, 300000)
+}, 60000)
 
 // var pass =  ''
 
