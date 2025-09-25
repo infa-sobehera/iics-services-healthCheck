@@ -13,7 +13,7 @@ Router.get("/", (req, res) => {
             res.render('aws_rel', { page_title: "AWS REL Services ", data: rows });
         }
         else {
-            console.log(error);
+            console.log(err);
             res.render('aws_rel', { page_title: "AWS REL Services ", data: '' });
 
         }
